@@ -31,7 +31,7 @@
 - [Cloudflare Pages limits](https://developers.cloudflare.com/pages/platform/limits/): Freeは同時1ビルド、月500ビルド、20,000ファイル、1ファイル25MiB。上限はアカウントの他プロジェクトとも関係するため無制限の更新を約束しない。
 - [Cloudflare Pages pricing](https://developers.cloudflare.com/pages/functions/pricing/): Functionsを呼ばない静的アセットのリクエストは無料・無制限。本プロジェクトにFunctions、Worker、DB、有料APIは不要。
 - [GitHub Actions billing](https://docs.github.com/billing/managing-billing-for-github-actions/about-billing-for-github-actions): パブリックリポジトリ＋標準GitHub-hosted runnerのActions利用は無料。large runner等は使わない。
-- Cloudflareアカウントの現在の契約画面・新規Pagesの稼働設定はログイン待ちにつき未確認。有料プラン変更は実施していない。
+- Cloudflareアカウントの現在の契約画面・新規Pagesの稼働設定はログインAPIの403により未確認。有料プラン変更は実施していない。
 
 ## AdSense
 

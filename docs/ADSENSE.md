@@ -4,7 +4,7 @@
 
 | 段階 | 状態 |
 |---|---|
-| 公開URL | Cloudflareログイン待ち。候補は bus-date-navi.pages.dev。未発行・未確認 |
+| 公開URL | Cloudflare認証時のAPI 403により未公開。候補は bus-date-navi.pages.dev。未発行・未確認 |
 | 既存パブリッシャーID | 既存f-sp-toolsの現行コードで確認した ca-pub-2422278081062267 |
 | meta・ads.txt | ソースに準備済み。公開後のHTTP到達は未確認 |
 | 広告配信コード | なし |
