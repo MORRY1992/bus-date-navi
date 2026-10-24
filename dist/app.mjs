@@ -1,5 +1,7 @@
 import {calculate,dateLabel,timeLabel,clockLabel,fullLabel,duration,shareText,copyText} from './core.mjs';
+import {initToolShare} from './tool-share.mjs';
 const $=id=>document.getElementById(id);
+initToolShare({button:$('share-tool'),show:$('show-tool-share'),status:$('tool-share-status'),fallback:$('tool-share-fallback'),text:$('tool-share-text')});
 const form=$('check-form'); let result=null,revision=0;
 const fields=['departureDate','departureTime','arrivalDate','arrivalTime','hotelDate','hotelTime'];
 function invalidate(){revision++;result=null;$('result').hidden=true;$('empty-result').hidden=false;$('copy-fallback').hidden=true;$('copy-status').textContent='';$('form-error').hidden=true;fields.forEach(id=>$(id).removeAttribute('aria-invalid'));}
