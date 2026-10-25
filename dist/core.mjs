@@ -64,3 +64,13 @@ export function shareText(r) {
 export async function copyText(text, clipboard) {
   try { if(!clipboard?.writeText) return false; await clipboard.writeText(text); return true; } catch { return false; }
 }
+
+
+// RFC 5545: UTC event times, CRLF, escaped TEXT, UTF-8 folds of at most 75 octets.
+export function calendarFile(r,now=Date.now()) {
+ const stamp=ms=>new Date(ms).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');
+ const escape=s=>s.replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/;/g,'\\;').replace(/,/g,'\\,');
+ const fold=line=>{let out='',size=0;for(const ch of line){const n=new TextEncoder().encode(ch).length;if(size+n>75){out+='\r\n ';size=1;}out+=ch;size+=n;}return out;};
+ const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//F-SP//Bus Date Navi//JA','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:departure-${r.departure.epoch}@bus-date-navi.pages.dev`,`DTSTAMP:${stamp(now)}`,`DTSTART:${stamp(r.departure.epoch)}`,`DTEND:${stamp(r.departure.epoch+30*MINUTE)}`,'STATUS:TENTATIVE','TRANSP:TRANSPARENT','SUMMARY:'+escape('仮の乗車メモ・予約元で要確認'),'DESCRIPTION:'+escape(shareText(r)+'\n30分の仮予定。到着時刻・集合時刻の指定ではありません。'),'END:VEVENT','END:VCALENDAR'];
+ return lines.map(fold).join('\r\n')+'\r\n';
+}
