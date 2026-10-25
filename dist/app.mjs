@@ -1,12 +1,12 @@
-import {calculate,dateLabel,timeLabel,clockLabel,fullLabel,duration,shareText,copyText,calendarFile} from './core.mjs';
+import {calculate,dateLabel,timeLabel,clockLabel,fullLabel,duration,shareText,copyText,calendarFile,pickerDate,japanDate,arrivalDateHint} from './core.mjs';
 import {initToolShare} from './tool-share.mjs';
 const $=id=>document.getElementById(id);
 initToolShare({button:$('share-tool'),show:$('show-tool-share'),status:$('tool-share-status'),fallback:$('tool-share-fallback'),text:$('tool-share-text')});
 const form=$('check-form'); let result=null,revision=0,calendarURL=null;
 const fields=['departureDate','departureTime','arrivalDate','arrivalTime','hotelDate','hotelTime'];
-function invalidate(){revision++;if(calendarURL){URL.revokeObjectURL(calendarURL);calendarURL=null;}$('calendar-save').hidden=true;$('calendar-save').removeAttribute('href');$('calendar-status').textContent='';result=null;$('result').hidden=true;$('empty-result').hidden=false;$('copy-fallback').hidden=true;$('copy-status').textContent='';$('form-error').hidden=true;fields.forEach(id=>$(id).removeAttribute('aria-invalid'));}
-form.addEventListener('input',invalidate);
-$('sample').addEventListener('click',()=>{form.reset();invalidate();$('departureDate').value='2026/11/07';$('departureTime').value='24:20';$('sample-notice').hidden=false;$('departureDate').focus();});
+function invalidate(){revision++;syncPickers();$('date-input-status').textContent='';if(calendarURL){URL.revokeObjectURL(calendarURL);calendarURL=null;}$('calendar-save').hidden=true;$('calendar-save').removeAttribute('href');$('calendar-status').textContent='';result=null;$('result').hidden=true;$('empty-result').hidden=false;$('copy-fallback').hidden=true;$('copy-status').textContent='';$('form-error').hidden=true;fields.forEach(id=>$(id).removeAttribute('aria-invalid'));}
+form.addEventListener('input',event=>{if(!event.target?.id?.endsWith('-picker'))invalidate();});
+$('sample').addEventListener('click',()=>{form.reset();invalidate();$('departureDate').value='2026/11/07';$('departureTime').value='24:20';syncPickers();$('sample-notice').hidden=false;$('departureDate').focus();});
 form.addEventListener('input',()=>{$('sample-notice').hidden=true;});
 $('clear-input').addEventListener('click',()=>{form.reset();invalidate();$('sample-notice').hidden=true;$('departureDate').focus();});
 form.addEventListener('submit',event=>{
@@ -18,6 +18,8 @@ form.addEventListener('submit',event=>{
     $('actual-clock').textContent=`${clockLabel(result.departure.epoch)} ／ 日本時間（JST）`;
     $('rollover').textContent=result.departure.dayOffset?'カレンダーでは翌日':'入力した日付として計算';
     $('prep').textContent=result.prep;
+    $('journey-duration').hidden=result.journeyMinutes===null;
+    if(result.journeyMinutes!==null)$('journey-duration').textContent=result.journeyMinutes>=0?'出発から到着まで '+duration(result.journeyMinutes):'到着予定が出発より前です。日付と時刻を再確認してください。';
     $('warnings').replaceChildren(...result.warnings.map(t=>{const p=document.createElement('p');p.textContent=t;return p;}));
     $('schedule').hidden=!result.arrival&&!result.hotel;
     $('arrival-row').hidden=!result.arrival;$('hotel-row').hidden=!result.hotel;
@@ -39,6 +41,19 @@ $('copy').addEventListener('click',async()=>{
 $('show-memo').addEventListener('click',()=>{if(!result)return;$('copy-fallback').hidden=false;$('copy-text').value=shareText(result);$('copy-text').focus();$('copy-text').select();});
 
 
-function example(values){form.reset();invalidate();for(const [id,v] of Object.entries(values))$(id).value=v;$('sample-notice').hidden=false;if(values.arrivalDate)$('arrivalDate').closest('details').open=true;$('departureDate').focus();}
+function example(values){form.reset();invalidate();for(const [id,v] of Object.entries(values))$(id).value=v;$('sample-notice').hidden=false;syncPickers();if(values.arrivalDate)$('arrivalDate').closest('details').open=true;$('departureDate').focus();}
 $('sample-year').addEventListener('click',()=>example({departureDate:'2026/12/31',departureTime:'25:10'}));
 $('sample-hotel').addEventListener('click',()=>example({departureDate:'2026/11/07',departureTime:'24:20',arrivalDate:'2026/11/08',arrivalTime:'07:00',hotelDate:'2026/11/08',hotelTime:'15:00'}));
+
+const dateFields=['departureDate','arrivalDate','hotelDate'];
+function syncPickers(){for(const id of ['departureDate','arrivalDate','hotelDate'])$(id+'-picker').value=pickerDate($(id).value);}
+function useDate(id,date,message){$(id).value=date;invalidate();$('sample-notice').hidden=true;$('date-input-status').textContent=message;$(id).focus();}
+for(const id of dateFields){
+ $(id).addEventListener('input',()=>{$(id+'-picker').value=pickerDate($(id).value);});
+ $(id+'-picker').addEventListener('input',()=>{const date=$(id+'-picker').value;useDate(id,date,date?'選んだ日付を反映しました。予約画面の表記と照合してください。':'日付を消しました。');});
+}
+$('use-today').addEventListener('click',()=>useDate('departureDate',japanDate(),'日本時間の今日を入力しました。予約の出発日と照合してください。'));
+$('use-tomorrow').addEventListener('click',()=>useDate('departureDate',japanDate(1),'日本時間の明日を入力しました。予約の出発日と照合してください。'));
+$('arrival-use-departure').addEventListener('click',()=>{try{useDate('arrivalDate',arrivalDateHint($('departureDate').value,$('departureTime').value),'換算後の出発日を到着日に仮入力しました。翌日以降に到着する場合は修正してください。');}catch(e){$('date-input-status').textContent=e.message;$(e.field||'departureDate').focus();}});
+$('hotel-use-arrival').addEventListener('click',()=>{const date=pickerDate($('arrivalDate').value);if(!date){$('date-input-status').textContent='先に到着予定日を入力してください。';$('arrivalDate').focus();return;}useDate('hotelDate',date,'到着日をホテル予定日に仮入力しました。前泊・翌日泊の場合は修正してください。');});
+syncPickers();

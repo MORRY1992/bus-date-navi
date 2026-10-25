@@ -52,12 +52,13 @@ export function calculate(input) {
   // 00:00–05:59: previous evening is an orientation aid, never a prescribed departure time.
   const prep=p.h<6?`${dateLabel(departure.epoch-DAY)}の夜から、日付が変わった後の出発に備える目安です。`:
     p.h>=18?`${dateLabel(departure.epoch)}の夜に出発する計算です。`:'日中・夕方の出発です。「準備する夜」は一律に決められません。';
-  return {departure,arrival,hotel,gap,prep,warnings};
+  const journeyMinutes=arrival?(arrival.epoch-departure.epoch)/MINUTE:null;
+  return {departure,arrival,hotel,gap,journeyMinutes,prep,warnings};
 }
 export function shareText(r) {
   return ['日付まちがい防止ナビ｜確認メモ',`予約画面の入力：${r.departure.date.iso} ${r.departure.time.text}発`,
     `乗車日時の計算結果：${fullLabel(r.departure.epoch)}`,`準備の目安：${r.prep}`,
-    ...(r.arrival?[`到着予定：${fullLabel(r.arrival.epoch)}`]:[]),...(r.hotel?[`ホテルチェックイン予定：${fullLabel(r.hotel.epoch)}`]:[]),
+    ...(r.arrival?[`到着予定：${fullLabel(r.arrival.epoch)}`]:[]),...(r.journeyMinutes!==null&&r.journeyMinutes>=0?[`出発から到着まで：${duration(r.journeyMinutes)}`]:[]),...(r.hotel?[`ホテルチェックイン予定：${fullLabel(r.hotel.epoch)}`]:[]),
     ...(r.gap!==null?[`ホテル予定は到着${r.gap<0?'より前':'から'} ${duration(r.gap)}${r.gap<0?'':'後'}`]:[]),...r.warnings,
     '予約元で乗車日・停留所・集合時刻・到着日を最終確認してください。運行会社の予約内容を保証するものではありません。'].join('\n');
 }
@@ -73,4 +74,13 @@ export function calendarFile(r,now=Date.now()) {
  const fold=line=>{let out='',size=0;for(const ch of line){const n=new TextEncoder().encode(ch).length;if(size+n>75){out+='\r\n ';size=1;}out+=ch;size+=n;}return out;};
  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//F-SP//Bus Date Navi//JA','CALSCALE:GREGORIAN','BEGIN:VEVENT',`UID:departure-${r.departure.epoch}@bus-date-navi.pages.dev`,`DTSTAMP:${stamp(now)}`,`DTSTART:${stamp(r.departure.epoch)}`,`DTEND:${stamp(r.departure.epoch+30*MINUTE)}`,'STATUS:TENTATIVE','TRANSP:TRANSPARENT','SUMMARY:'+escape('仮の乗車メモ・予約元で要確認'),'DESCRIPTION:'+escape(shareText(r)+'\n30分の仮予定。到着時刻・集合時刻の指定ではありません。'),'END:VEVENT','END:VCALENDAR'];
  return lines.map(fold).join('\r\n')+'\r\n';
+}
+
+export function pickerDate(value){try{return parseDate(value).iso;}catch{return '';}}
+export function japanDate(offset=0,now=Date.now()){
+ if(!Number.isInteger(offset)||Math.abs(offset)>366)throw new InputError('日付の範囲を確認してください。','departureDate');
+ const p=parts(now+offset*DAY);return parseDate(`${p.y}-${p.mo}-${p.d}`).iso;
+}
+export function arrivalDateHint(departureDate,departureTime){
+ const p=parts(convert(departureDate,departureTime).epoch);return parseDate(`${p.y}-${p.mo}-${p.d}`,'arrivalDate').iso;
 }

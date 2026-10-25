@@ -13,6 +13,14 @@ test('calendar link follows valid result and is cleared on edits or invalid inpu
  await el('copy').fire('click');assert.equal(el('copy-fallback').hidden,false);assert.match(el('copy-text').value,/2027年1月1日/);
  await el('check-form').fire('input');assert.equal(el('result').hidden,true);assert.equal(el('calendar-save').hidden,true);assert.equal(el('calendar-save').href,undefined);
  el('departureTime').value='30:00';await el('check-form').fire('submit');assert.equal(el('result').hidden,true);assert.equal(focused,'departureTime');
- await el('sample-hotel').fire('click');await el('check-form').fire('submit');assert.match(el('gap').textContent,/8時間/);
+ await el('sample-hotel').fire('click');await el('check-form').fire('submit');assert.match(el('gap').textContent,/8時間/);assert.match(el('journey-duration').textContent,/6時間40分/);
+ el('departureDate-picker').value='2028-02-29';await el('departureDate-picker').fire('input');assert.equal(el('departureDate').value,'2028-02-29');assert.equal(el('result').hidden,true);assert.match(el('date-input-status').textContent,/選んだ日付/);
+ el('departureDate').value='２０２６/１２/３１';el('departureTime').value='25:10';await el('departureDate').fire('input');assert.equal(el('departureDate-picker').value,'2026-12-31');
+ await el('arrival-use-departure').fire('click');assert.equal(el('arrivalDate').value,'2027-01-01');assert.match(el('date-input-status').textContent,/仮入力/);
+ await el('hotel-use-arrival').fire('click');assert.equal(el('hotelDate').value,'2027-01-01');
+ await el('clear-input').fire('click');assert.equal(el('departureDate-picker').value,'');assert.equal(el('hotelDate-picker').value,'');
+ await el('hotel-use-arrival').fire('click');assert.match(el('date-input-status').textContent,/先に到着予定日/);
+ await el('use-today').fire('click');assert.match(el('departureDate').value,/^\d{4}-\d{2}-\d{2}$/);
+ await el('clear-input').fire('click');
  delete globalThis.document;delete globalThis.navigator;
 });
