@@ -46,11 +46,11 @@ $('sample-year').addEventListener('click',()=>example({departureDate:'2026/12/31
 $('sample-hotel').addEventListener('click',()=>example({departureDate:'2026/11/07',departureTime:'24:20',arrivalDate:'2026/11/08',arrivalTime:'07:00',hotelDate:'2026/11/08',hotelTime:'15:00'}));
 
 const dateFields=['departureDate','arrivalDate','hotelDate'];
-function syncPickers(){for(const id of ['departureDate','arrivalDate','hotelDate'])$(id+'-picker').value=pickerDate($(id).value);}
-function useDate(id,date,message){$(id).value=date;invalidate();$('sample-notice').hidden=true;$('date-input-status').textContent=message;$(id).focus();}
+function syncPickers(){for(const id of ['departureDate','arrivalDate','hotelDate']){const picker=$(id+'-picker'),date=pickerDate($(id).value);if(picker.value!==date)picker.value=date;}}
+function useDate(id,date,message,{focus=true}={}){$(id).value=date;invalidate();$('sample-notice').hidden=true;$('date-input-status').textContent=message;if(focus)$(id).focus();}
 for(const id of dateFields){
  $(id).addEventListener('input',()=>{$(id+'-picker').value=pickerDate($(id).value);});
- $(id+'-picker').addEventListener('input',()=>{const date=$(id+'-picker').value;useDate(id,date,date?'選んだ日付を反映しました。予約画面の表記と照合してください。':'日付を消しました。');});
+ $(id+'-picker').addEventListener('input',()=>{const date=$(id+'-picker').value;useDate(id,date,date?'選んだ日付を反映しました。予約画面の表記と照合してください。':'日付を消しました。',{focus:false});});
 }
 $('use-today').addEventListener('click',()=>useDate('departureDate',japanDate(),'日本時間の今日を入力しました。予約の出発日と照合してください。'));
 $('use-tomorrow').addEventListener('click',()=>useDate('departureDate',japanDate(1),'日本時間の明日を入力しました。予約の出発日と照合してください。'));
