@@ -23,7 +23,7 @@ document.querySelector('#run').onclick=async()=>{
     check(!el('result').hidden&&el('actual-date').textContent.includes(want),width+' '+d+' '+t);
     check(overflow(),width+' result overflow');
    }
-   input('departureTime','24:60');submit();check(el('result').hidden&&el('form-error').textContent.includes('分は00〜59')&&doc().activeElement.id==='departureTime',width+' error and focus');check(overflow(),width+' error overflow');
+   input('departureTime','24:60');submit();check(el('result').hidden&&el('form-error').textContent.includes('分は00〜59')&&!el('departureTime-error').hidden&&doc().activeElement.id==='departureTime',width+' error and focus');check(overflow(),width+' error overflow');
   }
   el('sample-year').click();submit();check(el('result-kind').textContent.includes('入力例'), 'example label');
   el('edit-input').click();check(el('result').hidden&&doc().activeElement.id==='departureDate','edit hides stale result and focuses field');

@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 initToolShare({button:$('share-tool'),show:$('show-tool-share'),status:$('tool-share-status'),fallback:$('tool-share-fallback'),text:$('tool-share-text')});
 const form=$('check-form'); let result=null,revision=0,calendarURL=null,exampleMode=false;
 const fields=['departureDate','departureTime','arrivalDate','arrivalTime','hotelDate','hotelTime'];
-function invalidate(){revision++;syncPickers();$('date-input-status').textContent='';if(calendarURL){URL.revokeObjectURL(calendarURL);calendarURL=null;}$('calendar-save').hidden=true;$('calendar-save').removeAttribute('href');$('calendar-status').textContent='';result=null;$('result').hidden=true;$('empty-result').hidden=false;$('copy-fallback').hidden=true;$('copy-status').textContent='';$('form-error').hidden=true;fields.forEach(id=>$(id).removeAttribute('aria-invalid'));}
+function invalidate(){revision++;syncPickers();$('date-input-status').textContent='';if(calendarURL){URL.revokeObjectURL(calendarURL);calendarURL=null;}$('calendar-save').hidden=true;$('calendar-save').removeAttribute('href');$('calendar-status').textContent='';result=null;$('result').hidden=true;$('empty-result').hidden=false;$('copy-fallback').hidden=true;$('copy-status').textContent='';$('form-error').hidden=true;fields.forEach(id=>{$(id).removeAttribute('aria-invalid');$(id+'-error').hidden=true;$(id+'-error').textContent='';});}
 form.addEventListener('input',event=>{if(!event.target?.id?.endsWith('-picker'))invalidate();});
 $('sample').addEventListener('click',()=>{form.reset();invalidate();$('departureDate').value='2026/11/07';$('departureTime').value='24:20';syncPickers();$('sample-notice').hidden=false;exampleMode=true;$('departureDate').focus();});
 form.addEventListener('input',()=>{$('sample-notice').hidden=true;exampleMode=false;});
@@ -34,7 +34,7 @@ form.addEventListener('submit',event=>{
     if(result.gap!==null)$('gap').textContent=result.gap<0?`チェックイン予定は到着より ${duration(result.gap)} 前です`:result.gap===0?'到着予定とチェックイン予定は同時刻です':`到着からチェックイン予定まで ${duration(result.gap)}`;
     try{calendarURL=URL.createObjectURL(new Blob([calendarFile(result)],{type:'text/calendar;charset=utf-8'}));$('calendar-save').href=calendarURL;$('calendar-save').hidden=false;}catch{$('calendar-status').textContent='この環境では予定ファイルを作成できません。確認メモをご利用ください。';}
     $('empty-result').hidden=true;$('result').hidden=false;$('result-title').focus();
-  }catch(error){$('form-error').textContent=error.message;$('form-error').hidden=false;if(error.field&&$(error.field)){$(error.field).setAttribute('aria-invalid','true');const details=$(error.field).closest('details');if(details)details.open=true;$(error.field).focus();}}
+  }catch(error){$('form-error').textContent=error.message;$('form-error').hidden=false;if(error.field&&$(error.field)){$(error.field).setAttribute('aria-invalid','true');$(error.field+'-error').textContent=error.message;$(error.field+'-error').hidden=false;const details=$(error.field).closest('details');if(details)details.open=true;$(error.field).focus();}}
 });
 $('copy').addEventListener('click',async()=>{
   if(!result)return; const copyRevision=revision, text=resultMemo();$('copy').disabled=true;
