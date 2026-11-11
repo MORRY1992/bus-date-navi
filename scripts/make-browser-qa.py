@@ -1,0 +1,10 @@
+"""Generate temporary branch-only browser QA. Remove dist/__qa* before merging."""
+from pathlib import Path
+import html
+root=Path(__file__).resolve().parents[1]
+page=(root/'dist/index.html').read_text()
+guide=(root/'dist/guide.html').read_text()
+(root/'dist/__qa.html').write_text('''<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Temporary branch-only QA"><link rel="canonical" href="https://bus-date-navi.pages.dev/"><meta name="robots" content="noindex,nofollow"><title>Zone4 QA</title><link rel="stylesheet" href="/__qa.css"><script defer src="/__qa.mjs"></script></head><body><h1>Zone4 Browser QA · 合成入力のみ</h1><p><button id="run">Run regression</button> <label>幅 <select id="width"><option>390</option><option>375</option><option>320</option><option>1280</option></select></label> <button id="guide">ガイド</button><button id="home">TOP</button><button id="zoom">文字・レイアウト200%</button><button id="result-view">結果を表示</button><button id="error-view">エラーを表示</button></p><pre id="report">未実行</pre><iframe id="preview" title="検査画面" srcdoc="'''+html.escape(page,quote=True)+'''"></iframe><template id="home-source">'''+html.escape(page)+'''</template><template id="guide-source">'''+html.escape(guide)+'''</template></body></html>''')
+(root/'dist/__qa.css').write_text('body{font:14px sans-serif;margin:16px;background:#ddd}button,select{padding:10px}iframe{display:block;border:1px solid #888;width:390px;height:950px;background:white}pre{white-space:pre-wrap;max-height:170px;overflow:auto}h1{font-size:18px}')
+
+(root/'dist/__qa.mjs').write_text((root/'scripts/browser-qa.mjs').read_text())
