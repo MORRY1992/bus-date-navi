@@ -6,7 +6,7 @@ for(const file of readdirSync(root).filter(f=>f.endsWith('.html'))){
  for(const pattern of [/<html lang="ja">/,/name="viewport"/,/<title>[^<]+<\/title>/,/name="description"/,/rel="canonical"/,/<h1>/]){assert.match(html,pattern,file);checks++;}
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);assert.equal(ids.length,new Set(ids).size,`${file} duplicate ids`);checks++;
  for(const [,link] of html.matchAll(/(?:href|src)="([^"]+)"/g)){
-  if(/^(https?:|mailto:)/.test(link))continue;
+  if(/^(https?:|mailto:|\/\/)/.test(link))continue;
   const [path,hash]=link.split('#');const route=path.replace(/^\//,'');
   assert.ok(!/^\/(?:guide|about|privacy|terms)\.html$/.test(path),`${file}: use canonical path for ${link}`);
   const target=path===''?file:path==='/'?'index.html':/^(guide|about|privacy|terms)$/.test(route)?route+'.html':route;
@@ -19,3 +19,4 @@ const app=readFileSync(new URL('app.mjs',root),'utf8');assert.ok(!/innerHTML|fet
 const index=readFileSync(new URL('index.html',root),'utf8');assert.ok(!/id="(?:reset|submit|action|method)"/.test(index));checks++;
 assert.equal(readFileSync(new URL('ads.txt',root),'utf8').trim(),'google.com, pub-2422278081062267, DIRECT, f08c47fec0942fa0');checks++;
 console.log(`Static checks: ${checks} passed, 0 failed`);
+

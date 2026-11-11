@@ -1,0 +1,17 @@
+{
+  "workId": "FAD-25D-20261112-BUS-01",
+  "siteId": "3785973",
+  "siteUrl": "https://bus-date-navi.pages.dev/",
+  "programId": "2021810",
+  "advertiser": "じゃらんnet",
+  "partnership": "approved",
+  "adId": "2085674",
+  "placementId": "892745985",
+  "format": "free-text",
+  "checkedAt": "2026-11-12",
+  "originalCode": "<a href=\"//ck.jp.ap.valuecommerce.com/servlet/referral?sid=3785973&pid=892745985\" rel=\"nofollow\"><img src=\"//ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3785973&pid=892745985\" height=\"1\" width=\"1\" border=\"0\">自由テキスト</a>",
+  "text": "じゃらんnetで宿泊プランを探す",
+  "placement": "/guide#hotel",
+  "verification": "VCで日付まちがい防止ナビ3785973を単独選択。未提携を確認後に申請し、提携済み表示と対象媒体用発行コードを読み戻し。自由テキストの表示名だけ指定し、href・SID・PID・計測画像・属性は変更しない。",
+  "conditions": "国内宿泊のウェブ予約と宿泊完了が対象。アプリ経由、デイユース、電話予約、取消等の条件に注意。承認・報酬・入金は別途確認。"
+}
