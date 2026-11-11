@@ -1,6 +1,6 @@
 const frame=document.querySelector('#preview'), report=document.querySelector('#report');
 const doc=()=>frame.contentDocument, win=()=>frame.contentWindow, el=id=>doc().getElementById(id);
-const input=(id,value)=>{el(id).value=value;el(id).dispatchEvent(new win().Event('input',{bubbles:true}));};
+const input=(id,value)=>{el(id).value=value;el(id).dispatchEvent(new (win().Event)('input',{bubbles:true}));};
 const submit=()=>el('check-form').requestSubmit();
 const wait=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 const fresh=async()=>{const ready=new Promise(resolve=>frame.onload=resolve);frame.srcdoc=document.querySelector('#home-source').content.textContent;await ready;await wait();};
