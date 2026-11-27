@@ -8,8 +8,8 @@ for(const file of readdirSync(root).filter(f=>f.endsWith('.html'))){
  for(const [,link] of html.matchAll(/(?:href|src)="([^"]+)"/g)){
   if(/^(https?:|mailto:|\/\/)/.test(link))continue;
   const [path,hash]=link.split('#');const route=path.replace(/^\//,'');
-  assert.ok(!/^\/(?:guide|about|privacy|terms)\.html$/.test(path),`${file}: use canonical path for ${link}`);
-  const target=path===''?file:path==='/'?'index.html':/^(guide|about|privacy|terms)$/.test(route)?route+'.html':route;
+  assert.ok(!/^\/(?:guide|about|privacy|terms|boarding-slip)\.html$/.test(path),`${file}: use canonical path for ${link}`);
+  const target=path===''?file:path==='/'?'index.html':/^(guide|about|privacy|terms|boarding-slip)$/.test(route)?route+'.html':route;
   assert.ok(existsSync(new URL(target,root)),`${file}: missing ${link}`);checks++;
   if(hash){assert.ok(readFileSync(new URL(target,root),'utf8').includes(`id="${hash}"`),`${file}: missing anchor ${link}`);checks++;}
  }

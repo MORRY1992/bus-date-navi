@@ -1,0 +1,30 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>夜行バスの集合日はいつ？ 予約票の翌日・24時表記を照合｜日付まちがい防止ナビ</title><meta name="description" content="乗車地の出発日時と指定分数から集合日を照合。WILLER・さくら高速バスの予約日と乗車日を公式例で確認できます。"><meta name="theme-color" content="#162f50"><link rel="canonical" href="https://bus-date-navi.pages.dev/boarding-slip"><meta property="og:type" content="website"><meta property="og:title" content="夜行バスの集合日はいつ？ 予約票の翌日・24時表記を照合｜日付まちがい防止ナビ"><meta property="og:description" content="乗車地の出発日時と指定分数から集合日を照合。WILLER・さくら高速バスの予約日と乗車日を公式例で確認できます。"><meta property="og:url" content="https://bus-date-navi.pages.dev/boarding-slip"><meta property="og:locale" content="ja_JP"><meta name="twitter:card" content="summary"><meta name="google-adsense-account" content="ca-pub-2422278081062267"><link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script type="module" src="/boarding-slip.mjs"></script></head><body><a class="skip" href="#main">本文へ移動</a><header class="site-header"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">☾</span><span>日付まちがい防止ナビ<small>NIGHT BUS · DATE CHECK</small></span></a><nav aria-label="メイン"><a href="/guide">日付の読み方</a><span class="free">無料・登録不要</span></nav></header><main id="main" class="document">
+<a class="back" href="/">← 出発日時の計算へ</a>
+<h1>夜行バスの予約票から、集合する日を確かめる</h1>
+<p class="lead">1月1日 0:10発の便でも、集合が20分前なら、乗り場に着くのは12月31日 23:50です。予約票を開いて、自分が乗る停留所の行と、集合案内を並べて見てください。</p>
+<section><h2>予約票にはどう書かれていますか？</h2>
+<ol><li><strong>「12月31日 24:10」</strong>は、暦では1月1日の0:10。24時間を一度だけ差し引きます。</li>
+<li><strong>「12月31日運行／翌日 0:10」</strong>は、運行日の翌日である1月1日の0:10。「翌日」がどの日を指すかを表の見出しで確認します。</li>
+<li><strong>「乗車日時 1月1日 0:10」</strong>と乗車地点の暦日が明記されていれば、そのまま1月1日の0:10です。もう一日足すと乗り遅れます。</li></ol>
+<p>時刻が「0:10」としか書かれていない場合は、便の始発日だけでは判定できません。予約詳細の停留所名と日付注記を確認し、記載が足りなければ予約元に「○○停留所に集合するのは、カレンダー上で何日ですか」と確認してください。</p></section>
+<section><h2>自分の乗車日時・集合日時を照合する</h2>
+<form id="slip-form" hidden novalidate>
+<div class="field"><label for="notation">予約票の書き方</label><select id="notation" required>
+<option value="">選んでください</option><option value="extended">時刻表に24〜29時台で記載</option><option value="next">基準日と「翌日 0〜23時台」が明記</option><option value="calendar">乗車地点の暦日と0〜23時台が明記</option><option value="unknown">日付の基準が読み取れない</option></select></div>
+<fieldset id="slip-fields"><legend>予約票から転記</legend>
+<div class="field"><label id="slip-date-label" for="slip-date">予約票に書かれた日付</label><input type="date" id="slip-date" min="1900-01-01" max="9998-12-31"></div>
+<div class="field"><label for="slip-time">自分が乗る停留所の出発時刻</label><input id="slip-time" type="text" placeholder="例：24:10"></div>
+<div class="field"><label for="lead-minutes">予約元が指定した集合は出発の何分前？（任意）</label><input id="lead-minutes" type="text" inputmode="numeric" placeholder="例：20"><small>「出発の○分前」と指定があるときだけ入力。集合時刻が直接指定されている場合はその時刻を優先してください。</small></div></fieldset>
+<button class="primary-link" type="submit">日時を照合する</button><p id="slip-result" role="status" aria-live="polite"></p></form>
+<noscript><p>自動照合を使うにはJavaScriptを有効にしてください。上の3つの読み方と下の例はそのまま利用できます。</p></noscript></section>
+<section><h2>予約画面で選ぶ日を、公式の例で確認する</h2>
+<h3>WILLERで、元日の午前1時に乗りたい</h3><p>公式FAQの年越し例では、到着日が1月1日の夜行便を12月31日で検索し、25時発を選びます。カレンダーに入れる乗車日時は1月1日 1:00。日付を共有するときは「31日の夜に出かけ、年が明けて1時に乗る」と伝えると、待ち合わせの夜もそろいます。</p>
+<p><a href="https://faq.willer.co.jp/s/article/1470">WILLER公式FAQで検索日と乗車日の例を確認</a></p>
+<h3>さくら高速バスで、早朝に着く便を選びたい</h3><p>公式FAQの例では、12月31日 24:15発の便が1月1日 6:00に着きます。照合する順番は、予約画面の出発日が12月31日、自分の時計での出発が1月1日 0:15、最終確認画面の到着が1月1日 6:00です。0:15と6:00は同じ暦日になります。</p>
+<p><a href="https://www.489.fm/faq/reserve/p12.html">さくら高速バス公式FAQで出発日と最終確認画面の見方を確認</a></p>
+<p>両社が説明する夜行便の例です。別の予約サービスや便では、その便の検索日・乗車日・停留所の注記に従ってください。</p></section>
+<section><h2>集合メモに残す4項目</h2>
+<p>例「集合 12月31日 23:50 ／ ○○停留所・北口 ／ 出発 1月1日 0:10 ／ 便名 △△」。集合の20分前指定と停留所名・便名は説明用です。予約メールを見ながら、自分の4項目に置き換えてください。同行者が別の停留所から乗るときは、その人の集合日時を別に確認します。</p>
+<p><a href="/#input-title">出発・到着・ホテルの予定を続けて計算する</a></p></section>
+<p class="updated">編集・例題作成　F計画SP ｜ 公式FAQの照合・内容更新　2026年11月27日</p></main>
+<footer><a class="footer-brand" href="/">日付まちがい防止ナビ</a><nav aria-label="サイト情報"><a href="/guide">使い方・よくある質問</a><a href="/about">運営・お問い合わせ</a><a href="/privacy">プライバシー</a><a href="/terms">利用上の注意</a></nav><small>F計画SP ｜ 日本国内の移動・日本時間（JST）に対応</small></footer></body></html>
