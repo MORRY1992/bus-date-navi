@@ -24,3 +24,7 @@ body{line-height:1.75}.site-header{min-height:80px}.brand-mark{border-radius:50%
 @media print{.hero,.input-panel,.tool-sharing,.reading,.sources,footer,.site-header,.result-actions,.memo-button,.next-step,.calendar-save{display:none}.workspace{display:block}.result-panel{border:0}}
 
 .field-error{font-size:13px;color:var(--error);font-weight:700;margin:8px 0 0;line-height:1.7}
+
+#slip-form select { max-width:100%; width:100%; padding:.75rem; font:inherit; color:inherit; background:white; border:1px solid #8696a7; border-radius:.5rem; }
+#slip-form button { cursor:pointer; font:inherit; }
+#slip-result:not(:empty) { border-left:4px solid #396782; background:#eff5f8; padding:1rem; font-weight:700; }
