@@ -19,7 +19,7 @@ for url in urls:
 jalan_code=ad['originalCode'].replace('自由テキスト',escape(ad['text']))
 
 
-nav='<header class="site-header"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">☾</span><span>日付まちがい防止ナビ<small>NIGHT BUS · DATE CHECK</small></span></a><nav aria-label="メイン"><a href="/guide">日付の読み方</a><span class="free">無料・登録不要</span></nav></header>'
+nav='<header class="site-header"><a class="series-link" href="https://rakuchinder.com/" aria-label="ラクチンダーのツール一覧">R</a><a class="brand" href="/"><span class="brand-mark" aria-hidden="true">☾</span><span>日付まちがい防止ナビ<small>NIGHT BUS · DATE CHECK</small></span></a><nav aria-label="メイン"><a href="/guide">日付の読み方</a><span class="free">無料・登録不要</span></nav></header>'
 footer='<footer><a class="footer-brand" href="/">日付まちがい防止ナビ</a><nav aria-label="サイト情報"><a href="/guide">使い方・よくある質問</a><a href="/about">運営・お問い合わせ</a><a href="/privacy">プライバシー</a><a href="/terms">利用上の注意</a></nav><small>F計画SP ｜ 日本国内の移動・日本時間（JST）に対応</small></footer>'
 def page(file,title,desc,content,script=False):
     url=origin+('/' if file=='index.html' else '/'+file.removesuffix('.html'))
@@ -34,7 +34,7 @@ def field(id,label,placeholder,hint):
     return f'<div class="field"><label for="{id}">{label}</label><input id="{id}" name="{id}" type="text" inputmode="text" placeholder="{placeholder}" maxlength="24" aria-describedby="{id}-hint {id}-error" autocomplete="off" spellcheck="false"><small id="{id}-hint">{hint}</small><p id="{id}-error" class="field-error" hidden></p>{picker}</div>'
 
 boundary_example='<figure class="boundary-example"><figcaption><span class="example-label">表記の例</span> 7日24:20 ＝ 暦の8日0:20</figcaption><div class="day-strip"><div><span>7日・夜</span><strong>23:59</strong></div><div class="midnight"><span>日付が変わる</span><strong>8日 0:00</strong></div><div class="destination"><span>7日24:20 のこと</span><strong>8日 0:20</strong></div></div><p>時刻の順序を示す図です。間隔は時間に比例しません。</p></figure>'
-home='''<main id="main"><section class="hero"><div><p class="eyebrow">夜行バス・遠征の出発前に</p><h1>24時を過ぎたら、<br><span>何日の何時？</span></h1><p class="hero-lead">予約画面の表記を、カレンダーの日時へ。</p><div class="hero-tags"><span>00:00〜29:59対応</span><span>日本時間・端末内で計算</span></div></div>'''+boundary_example+'''</section>
+home='''<main id="main"><section class="hero"><div class="cover-copy"><h1>24時を過ぎたら、<br><span>何日の何時？</span></h1><p class="hero-lead">予約画面の表記を、カレンダーの日時へ。</p><nav class="hero-routes" aria-label="日付確認の入口"><a href="#input-title">出発日時を計算 ↓</a><a href="/boarding-slip">集合日を照合</a></nav></div><img class="cover-art" alt="" src="/clock.webp" width="960" height="600" fetchpriority="high"></section>'''+boundary_example+'''
 <div class="important-intro"><p><strong>表記の変換ツールです。</strong> 予約に選ぶ日付・便の運行日は予約元で確認してください。</p><a href="#input-title">自分の日時を確認 ↓</a></div>
 <div class="workspace"><section class="panel input-panel" aria-labelledby="input-title"><div class="section-heading"><span class="step">01</span><h2 id="input-title">予約画面の表記を入力</h2></div><p class="muted">購入手続きした日ではなく、予約詳細にある出発日です。</p><form id="check-form" novalidate><fieldset><legend>出発日時 <span class="required">必須</span></legend>'''
 home+=field('departureDate','表示されている出発日','例：2026/11/07','年/月/日、または年-月-日。全角でも入力できます。')
